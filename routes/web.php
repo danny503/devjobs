@@ -23,4 +23,5 @@ Auth::routes(['verify' => true]);
 Route::get('/home', 'HomeController@index')->name('home');
 
 //Rutas de vacantes
-Route::get('/vacante', 'VacanteController@index')->name('vacante.index');
+Route::get('/vacante', 'VacanteController@index')->name('vacantes.index');
+Route::get('/vacante/create', 'VacanteController@create')->name('vacantes.create');
