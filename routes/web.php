@@ -25,3 +25,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Rutas de vacantes
 Route::get('/vacante', 'VacanteController@index')->name('vacantes.index');
 Route::get('/vacante/create', 'VacanteController@create')->name('vacantes.create');
+
+//Subir imagenes
+Route::post('/vacantes/imagen', 'VacanteController@imagen')->name('vacantes.imagen');
+Route::post('/vacantes/borrarimagen', 'VacanteController@borrarimagen')->name('vacantes.borrar');
+Route::post('/vacantes', 'VacanteController@store')->name('vacantes.store');
