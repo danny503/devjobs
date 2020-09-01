@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Vacante;
 use App\Candidato;
 use Illuminate\Http\Request;
+use App\Notifications\NuevoCadidato;
 
 class CandidatoController extends Controller
 {
@@ -44,14 +46,10 @@ class CandidatoController extends Controller
         $candidato->vacante_id = $data['vacante_id'];
         $candidato->save();
 
-        //Otra forma de guardar en la DB
-        // $candidato = new Candidato($data);
-        // $candidato->cv = "123.pdf";
+        $vacante = Vacante::find($data['vacante_id']);
+        $reclutador = $vacante->reclutador;
+        $reclutador->notify( new NuevoCadidato($vacante->titulo));
 
-        //Otra forma de guardar en la DB
-        // $candidato = new Candidato();
-        //$candidato->fill($data);
-        // $candidato->cv = "123.pdf";
 
         return back()->with('estado', 'Tus datos se enviaron correctamente, suerte!!');
     }
