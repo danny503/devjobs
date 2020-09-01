@@ -8,17 +8,18 @@ use App\Categoria;
 use App\Ubicacion;
 use App\Experiencia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class VacanteController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', 'verified']);
-    }
+   
     public function index()
     {
-        return view('vacantes.index');
+        //$vacantes = auth()->user()->vacantes;
+
+        $vacantes = Vacante::where('user_id', auth()->user()->id)->simplePaginate(3);
+        return view('vacantes.index', compact('vacantes'));
     }
 
     public function create()
@@ -44,14 +45,25 @@ class VacanteController extends Controller
             'skills' => 'required'
         ]);
 
-        
-
-        return 'jj';
+        //Almacenar en la DB
+        $vacante = new Vacante();
+        $vacante->titulo = $data['titulo'];
+        $vacante->descripcion = $data['descripcion'];
+        $vacante->categoria_id = $data['categoria'];
+        $vacante->experiencia_id = $data['experiencia'];
+        $vacante->ubicacion_id = $data['ubicacion'];
+        $vacante->salario_id = $data['salario'];
+        $vacante->skills = $data['skills'];
+        $vacante->imagen = $data['imagen'];
+        $vacante->user_id = \Auth::user()->id;        
+        $vacante->save();
+                
+        return redirect()->action('VacanteController@index');
     }
 
     public function show(Vacante $vacante)
     {
-        //
+        return view('vacantes.show', compact('vacante'));
     }
 
     public function edit(Vacante $vacante)
