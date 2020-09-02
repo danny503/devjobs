@@ -10,9 +10,14 @@ use App\Notifications\NuevoCadidato;
 class CandidatoController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //Obtener ek ID actual
+        $id_vacante = $request->route('id');
+        //obtener
+        $vacante = Vacante::findOrFail($id_vacante);
+
+        return view('candidatos.index', compact('vacante'));
     }
 
     public function create()
@@ -48,7 +53,7 @@ class CandidatoController extends Controller
 
         $vacante = Vacante::find($data['vacante_id']);
         $reclutador = $vacante->reclutador;
-        $reclutador->notify( new NuevoCadidato($vacante->titulo));
+        $reclutador->notify( new NuevoCadidato($vacante->titulo, $vacante->id));
 
 
         return back()->with('estado', 'Tus datos se enviaron correctamente, suerte!!');
