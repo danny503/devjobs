@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 
 class VacanteController extends Controller
 {
-   
+
     public function index()
     {
         //$vacantes = auth()->user()->vacantes;
@@ -55,9 +55,9 @@ class VacanteController extends Controller
         $vacante->salario_id = $data['salario'];
         $vacante->skills = $data['skills'];
         $vacante->imagen = $data['imagen'];
-        $vacante->user_id = \Auth::user()->id;        
+        $vacante->user_id = \Auth::user()->id;
         $vacante->save();
-                
+
         return redirect()->action('VacanteController@index');
     }
 
@@ -79,7 +79,9 @@ class VacanteController extends Controller
 
     public function destroy(Vacante $vacante)
     {
-        //
+        //return response()->json($vacante);
+        $vacante->delete();
+        return response()->json(['mensaje' => 'Se eliminó la vacante' . $vacante->titulo]);
     }
 
     public function imagen(Request $request)
@@ -101,5 +103,15 @@ class VacanteController extends Controller
 
             return response('Imagen eliminada', 200);
         }
+    }
+
+    //Cambia el esatdo de la vacante
+    public function cambiarEstado(Request $request, Vacante $vacante)
+    {
+        //Leer nuevo estado y asignarlo
+        $vacante->activa = $request->estado;
+        //guardar en la Db
+        $vacante->save();
+        return response()->json(['respuesta' => 'Correcto']);
     }
 }

@@ -12,7 +12,7 @@ class CandidatoController extends Controller
 
     public function index(Request $request)
     {
-        //Obtener ek ID actual
+        //Obtener el ID actual
         $id_vacante = $request->route('id');
         //obtener
         $vacante = Vacante::findOrFail($id_vacante);
