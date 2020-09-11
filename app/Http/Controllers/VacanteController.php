@@ -19,6 +19,7 @@ class VacanteController extends Controller
         //$vacantes = auth()->user()->vacantes;
 
         $vacantes = Vacante::where('user_id', auth()->user()->id)->simplePaginate(3);
+
         return view('vacantes.index', compact('vacantes'));
     }
 
@@ -68,6 +69,8 @@ class VacanteController extends Controller
 
     public function edit(Vacante $vacante)
     {
+        $this->authorize('view', $vacante);
+
         $categorias = Categoria::all();
         $experiencias = Experiencia::all();
         $ubicaciones = Ubicacion::all();
@@ -77,12 +80,38 @@ class VacanteController extends Controller
 
     public function update(Request $request, Vacante $vacante)
     {
-        //
+        $this->authorize('update', $vacante);
+
+        //dd($request->all);
+        $data = $request->validate([
+            'titulo' => 'required|min:6',
+            'categoria' => 'required',
+            'experiencia' => 'required',
+            'ubicacion' => 'required',
+            'salario' => 'required',
+            'descripcion' => 'required|min:50',
+            'imagen' => 'required',
+            'skills' => 'required'
+        ]);
+
+        $vacante->titulo = $data['titulo'];
+        $vacante->skills = $data['skills'];
+        $vacante->imagen = $data['imagen'];
+        $vacante->descripcion = $data['descripcion'];
+        $vacante->categoria_id = $data['categoria'];
+        $vacante->experiencia_id = $data['experiencia'];
+        $vacante->ubicacion_id = $data['ubicacion'];
+        $vacante->salario_id = $data['salario'];
+        $vacante->save();
+
+        return redirect()->action('VacanteController@index');
+
     }
 
 
     public function destroy(Vacante $vacante)
     {
+        $this->authorize('delete', $vacante);
         //return response()->json($vacante);
         $vacante->delete();
         return response()->json(['mensaje' => 'Se eliminó la vacante' . $vacante->titulo]);

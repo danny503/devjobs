@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::post('/vacantes', 'VacanteController@store')->name('vacantes.store');
     Route::delete('/vacantes/{vacante}', 'VacanteController@destroy')->name('vacante.eliminar');
     Route::get('vacantes/{vacante}/edit', 'VacanteController@edit')->name('vacante.edit');
+    Route::put('vacantes/{vacante}', 'VacanteController@update')->name('vacante.update');
     //Subir imagenes
     Route::post('/vacantes/imagen', 'VacanteController@imagen')->name('vacantes.imagen');
     Route::post('/vacantes/borrarimagen', 'VacanteController@borrarimagen')->name('vacantes.borrar');
