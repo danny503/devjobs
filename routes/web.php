@@ -3,20 +3,6 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes(['verify' => true]);
 
@@ -42,10 +28,19 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
     //Noficaciones
     Route::get('/notificaciones', 'NotificacionsController')->name('notificaciones');
 });
+//Pagina de inicio
+Route::get('/', 'IniciController')->name('inicio');
+
+//Categorias
+Route::get('/categorias/{categoria}', 'CategoriaController@show')->name('categorias.show');
 
 //Enviar datos para una vacante
 Route::get('/candidatos/{id}', 'CandidatoController@index')->name('candidatos.index');
 Route::post('/candidatos/store', 'CandidatoController@store')->name('cadidatos.store');
 
 //Muestra los trabajos en el fron-end sin autenticacion
+Route::get('/vacantes/buscar', 'VacanteController@resultados')->name('vacantes.resultado');
+Route::post('/busqueda/buscar', 'VacanteController@buscar')->name('vacantes.buscar');
 Route::get('/vacantes/{vacante}', 'VacanteController@show')->name('vacantes.show');
+
+

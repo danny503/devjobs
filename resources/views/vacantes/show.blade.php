@@ -2,6 +2,11 @@
     @section('styles')
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" integrity="sha512-ZKX+BvQihRJPA8CROKBhDNvoc2aDMOdAlcm7TUQY+35XYtrd3yh95QOOhsPDQY9QnKE0Wqag9y38OIgEvb88cA==" crossorigin="anonymous" />
     @endsection
+
+@section('navegacion')
+    @include('ui.categoriasnav')
+@endsection
+
 @section('content')
     <h1 class="text-3xl text-center mt-10">{{ $vacante->titulo}}</h1>
 
@@ -38,13 +43,13 @@
 
                 <a href="/storage/vacantes/{{$vacante->imagen}}" data-lightbox="imagen" data-title="Vacante {{$vacante->titulo}}">
                     <img src="/storage/vacantes/{{$vacante->imagen}}" alt="Imagen" class="w-40 mt-10">
-                </a>                
+                </a>
 
                 <div class="descripcion mt-10 mb-5">
                     {!! $vacante->descripcion !!}
                 </div>
-                
+
         </div>
-        @include('ui.contacto')        
+        @include('ui.contacto')
     </div>
 @endsection

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vacante extends Model
 {
-    protected $fillable = ['titulo','imagen','descipcion', 'skills', 'categoria_id', 'ubicacion_id', 'expercia_id', 'salario_id', 'user_id'];
+    protected $fillable = ['titulo','slug', 'imagen','descipcion', 'skills', 'categoria_id', 'ubicacion_id', 'expercia_id', 'salario_id', 'user_id'];
 
     //Relacion 1:1 categoria y vacante
     public function categoria()
@@ -41,5 +41,11 @@ class Vacante extends Model
     public function candidatos()
     {
         return $this->hasMany(Candidato::class);
+    }
+
+    //Slug
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

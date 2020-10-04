@@ -7,6 +7,7 @@ use App\Vacante;
 use App\Categoria;
 use App\Ubicacion;
 use App\Experiencia;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -18,7 +19,7 @@ class VacanteController extends Controller
     {
         //$vacantes = auth()->user()->vacantes;
 
-        $vacantes = Vacante::where('user_id', auth()->user()->id)->simplePaginate(3);
+        $vacantes = Vacante::where('user_id', auth()->user()->id)->orderBy( 'created_at','desc')->simplePaginate(3);
 
         return view('vacantes.index', compact('vacantes'));
     }
@@ -49,6 +50,7 @@ class VacanteController extends Controller
         //Almacenar en la DB
         $vacante = new Vacante();
         $vacante->titulo = $data['titulo'];
+        $vacante->slug = Str::slug($data['titulo'], '-');
         $vacante->descripcion = $data['descripcion'];
         $vacante->categoria_id = $data['categoria'];
         $vacante->experiencia_id = $data['experiencia'];
@@ -64,6 +66,7 @@ class VacanteController extends Controller
 
     public function show(Vacante $vacante)
     {
+        if($vacante->activa === 0 ) return abort(404);
         return view('vacantes.show', compact('vacante'));
     }
 
@@ -146,5 +149,35 @@ class VacanteController extends Controller
         //guardar en la Db
         $vacante->save();
         return response()->json(['respuesta' => 'Correcto']);
+    }
+
+    public function buscar(Request $request, Vacante $vacante)
+    {
+        //Validar
+        $data = $request->validate([
+            'categoria' => 'required',
+            'ubicacion' => 'required'
+        ]);
+
+        //Asignar valore
+        $categoria = $data['categoria'];
+        $ubicacion = $data['ubicacion'];
+
+        $vacantes = Vacante::latest()
+        ->where('categoria_id', $categoria)
+        ->where('ubicacion_id', $ubicacion)
+        ->get();
+
+        //Otra manera
+        // $vacantes = Vacante::where([
+        //     'categoria_id' => $categoria,
+        //     'ubicacion_id' => $ubicacion
+        // ])->get();
+        return view('buscar.index', compact('vacantes'));
+    }
+
+    public function resultados()
+    {
+        return ;
     }
 }

@@ -62,7 +62,7 @@
                     vacante-id="{{$vacante->id}} "
                     ></eliminar-vacante>
 
-                    <a href=" {{route('vacantes.show', ['vacante' => $vacante->id])}} " class="text-blue-600 hover:text-blue-900">Ver</a>
+                    <a href=" {{route('vacantes.show', $vacante)}} " class="text-blue-600 hover:text-blue-900">Ver</a>
               </td>
             </tr>
             @endforeach
